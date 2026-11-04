@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gírias do Brasil</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Figtree:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: deck de diapositivas a pantalla completa; cada slide es contenido o una actividad interactiva; barra de navegación abajo */
+:root{
+  --bg:#f4f5ef; --paper:#fbfcf8; --ink:#14211d; --muted:#56635d; --line:#d7dccf;
+  --accent:#c8442a; --accent-soft:#f6ddd4;
+  --green:#147553; --green-soft:#d8eee2;
+  --blue:#2455a3; --blue-soft:#dce5f5;
+  --violet:#6d3aa8; --violet-soft:#e9def5;
+  --red:#a8232f; --red-soft:#f5d9dc;
+  --ochre:#a86b00; --ochre-soft:#f5e7c8;
+  --rN:#1f8a5b; --rNE:#d9582f; --rCO:#c99a1a; --rSE:#2f62b8; --rS:#7b46b8; --on-r:#ffffff;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111816; --paper:#18211e; --ink:#e7ece6; --muted:#9daaa3; --line:#2c3833;
+  --accent:#ff7a5c; --accent-soft:#3d2219; --green:#5fd09f; --green-soft:#183328;
+  --blue:#8db0f0; --blue-soft:#1a2740; --violet:#c4a0f0; --violet-soft:#2a1f3a;
+  --red:#ff8a93; --red-soft:#3a1a1e; --ochre:#f0c25a; --ochre-soft:#33280f;
+  --rN:#2fa772; --rNE:#e86a42; --rCO:#c9a12a; --rSE:#4a7fd6; --rS:#9566d0; --on-r:#ffffff; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111816; --paper:#18211e; --ink:#e7ece6; --muted:#9daaa3; --line:#2c3833;
+  --accent:#ff7a5c; --accent-soft:#3d2219; --green:#5fd09f; --green-soft:#183328;
+  --blue:#8db0f0; --blue-soft:#1a2740; --violet:#c4a0f0; --violet-soft:#2a1f3a;
+  --red:#ff8a93; --red-soft:#3a1a1e; --ochre:#f0c25a; --ochre-soft:#33280f;
+  --rN:#2fa772; --rNE:#e86a42; --rCO:#c9a12a; --rSE:#4a7fd6; --rS:#9566d0; --on-r:#ffffff; color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);margin:0;overflow:hidden}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.08;margin:0}
+h2{font-size:clamp(1.7rem,4vw,2.8rem);font-weight:800;letter-spacing:-.015em}
+h3{font-size:1.2rem;font-weight:800}
+p{margin:0}
+a{color:var(--accent)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.muted{color:var(--muted)}
+
+/* deck */
+.deck{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);bottom:calc(60px + env(safe-area-inset-bottom,0px));overflow:hidden}
+.slide{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding-block:28px 36px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));opacity:0;visibility:hidden;transform:translateX(48px);transition:opacity .45s ease,transform .45s ease,visibility 0s linear .45s}
+.slide.past{transform:translateX(-48px)}
+.slide.active{opacity:1;visibility:visible;transform:none;transition:opacity .45s ease,transform .45s ease}
+.inner{max-width:1080px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;justify-content:center;gap:22px}
+.head{display:grid;gap:8px;max-width:70ch}
+.slide.active .rv{animation:rise .6s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0) * 90ms)}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* bottom bar */
+.bar{position:fixed;left:0;right:0;bottom:0;height:calc(60px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));background:var(--paper);border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;z-index:20}
+.prog{position:absolute;left:0;top:-1px;height:3px;background:var(--accent);transition:width .45s ease}
+.navbtn{border:1px solid var(--line);background:var(--bg);border-radius:999px;height:40px;min-width:40px;padding:0 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:.9rem}
+.navbtn:hover{border-color:var(--ink)}
+.navbtn:disabled{opacity:.35;cursor:default}
+.navbtn.next{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.slidename{flex:1;min-width:0;font-size:.88rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slidename b{color:var(--ink);font-variant-numeric:tabular-nums;font-family:var(--mono);font-weight:500;margin-right:8px}
+.menu{position:fixed;inset:0;z-index:30;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);overflow-y:auto;padding-block:calc(24px + env(safe-area-inset-top,0px)) 90px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.menu .mi{max-width:900px;margin:0 auto;display:grid;gap:16px}
+.menu ol{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.menu li button{width:100%;text-align:left;border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:10px 12px;cursor:pointer;display:flex;gap:10px;align-items:baseline}
+.menu li button:hover{border-color:var(--accent)}
+.menu li button span{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.menu li button.act{border-color:var(--accent);background:var(--accent-soft)}
+.menu .kind{font-size:.7rem;margin-left:auto;color:var(--violet);font-family:var(--mono)}
+
+/* generic bits */
+.btn{border:1px solid var(--ink);background:transparent;border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:600;font-size:.92rem}
+.btn:hover{background:var(--ink);color:var(--bg)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.08)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.tag{font-family:var(--mono);font-size:.7rem;padding:2px 8px;border-radius:4px;white-space:nowrap;font-weight:500}
+.t-p{background:var(--line);color:var(--ink)} .t-g{background:var(--green-soft);color:var(--green)} .t-r{background:var(--blue-soft);color:var(--blue)} .t-i{background:var(--violet-soft);color:var(--violet)} .t-v{background:var(--red-soft);color:var(--red)}
+.act-badge{display:inline-flex;gap:6px;align-items:center;background:var(--violet-soft);color:var(--violet);font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;width:fit-content}
+.score{font-family:var(--display);font-weight:800;font-size:1.2rem;font-variant-numeric:tabular-nums}
+.feedback{min-height:1.6em;font-weight:600}
+.feedback.ok{color:var(--green)} .feedback.no{color:var(--red)}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.pop{animation:pop .35s}
+@keyframes pop{50%{transform:scale(1.08)}}
+
+/* cover */
+.cover h1{font-size:clamp(3rem,11vw,7.5rem);font-weight:800;letter-spacing:-.035em}
+.cover h1 .q{color:var(--accent)}
+.cover-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center}
+@media (max-width:760px){.cover-grid{grid-template-columns:1fr}}
+.bubbles{position:relative;height:340px;min-width:0}
+.bub{position:absolute;font-family:var(--display);font-weight:800;padding:10px 18px;border-radius:22px;font-size:clamp(1rem,2.4vw,1.5rem);white-space:nowrap;animation:float 5s ease-in-out infinite;animation-delay:var(--d,0s)}
+.bub::after{content:"";position:absolute;bottom:-9px;left:22px;border:10px solid transparent;border-top-color:inherit;border-bottom:0}
+.b1{background:var(--accent);color:#fff;border-color:var(--accent)} .b2{background:var(--green-soft);color:var(--green);border-color:var(--green-soft)} .b3{background:var(--blue-soft);color:var(--blue);border-color:var(--blue-soft)} .b4{background:var(--violet-soft);color:var(--violet);border-color:var(--violet-soft)} .b5{background:var(--ink);color:var(--bg);border-color:var(--ink)} .b6{background:var(--ochre-soft);color:var(--ochre);border-color:var(--ochre-soft)}
+@keyframes float{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-12px) rotate(calc(var(--r,0deg) * -1))}}
+
+/* thermometer */
+.thermo{display:grid;gap:10px}
+.thermo .barg{height:14px;border-radius:999px;background:linear-gradient(90deg,var(--blue),var(--green),var(--ochre),var(--red))}
+.thermo .stops{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.thermo .st{display:grid;gap:4px;min-width:0}
+.thermo .st b{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase}
+.thermo .st span{font-family:var(--display);font-weight:800;font-size:clamp(.95rem,2.2vw,1.25rem)}
+.thermo .st small{color:var(--muted);font-size:.8rem}
+@media (max-width:560px){.thermo .stops{grid-template-columns:1fr 1fr}}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.note{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:6px;align-content:start}
+.note p{color:var(--muted);font-size:.93rem}
+
+/* morph pairs (habla reducida) */
+.morphs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.morph{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;cursor:pointer;text-align:left;display:grid;gap:6px;min-height:118px;align-content:start;transition:border-color .2s}
+.morph:hover{border-color:var(--accent)}
+.morph .full{font-family:var(--display);font-weight:800;font-size:1.35rem;transition:all .4s}
+.morph .short{font-family:var(--display);font-weight:800;font-size:1.9rem;color:var(--accent);display:none}
+.morph .ex{font-size:.86rem;color:var(--muted);font-style:italic;display:none}
+.morph.on .full{font-size:.9rem;color:var(--muted);text-decoration:line-through}
+.morph.on .short,.morph.on .ex{display:block;animation:rise .4s both}
+.morph .hint{font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+
+/* word cards */
+.words{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.wc{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:4px;align-content:start;min-width:0}
+.wc .hw{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.wc .term{font-family:var(--display);font-weight:800;font-size:1.2rem}
+.wc .m{font-size:.9rem}
+.wc .ex{font-size:.85rem;font-style:italic;color:var(--muted);border-left:2px solid var(--accent);padding-left:8px;margin-top:2px}
+.split{display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:center}
+@media (max-width:760px){.split{grid-template-columns:1fr}.split figure{max-width:200px}}
+figure{margin:0}
+figure svg{width:100%;height:auto;display:block}
+figcaption{font-size:.8rem;color:var(--muted);margin-top:6px;text-align:center}
+
+/* chat */
+.chatwrap{display:grid;grid-template-columns:minmax(0,420px) 1fr;gap:28px;align-items:start}
+@media (max-width:820px){.chatwrap{grid-template-columns:1fr}}
+.phone{background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:14px;box-shadow:0 18px 40px -24px rgba(0,0,0,.35)}
+.phone .top{display:flex;align-items:center;gap:10px;padding:4px 6px 12px;border-bottom:1px solid var(--line)}
+.phone .top b{font-size:.95rem}
+.phone .top small{display:block;color:var(--muted);font-size:.75rem}
+.msgs{height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:12px 4px}
+.msg{max-width:84%;padding:8px 12px;border-radius:16px;font-size:.93rem;cursor:pointer;animation:msgin .35s both;border:0;text-align:left}
+.msg.l{align-self:flex-start;background:var(--bg);border-bottom-left-radius:4px}
+.msg.r{align-self:flex-end;background:var(--green-soft);border-bottom-right-radius:4px}
+.msg .es{display:block;font-size:.8rem;color:var(--muted);margin-top:4px;font-style:italic}
+.msg .who{display:block;font-family:var(--mono);font-size:.66rem;color:var(--accent)}
+@keyframes msgin{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+.typing{align-self:flex-start;background:var(--bg);border-radius:16px;padding:10px 14px;display:flex;gap:4px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:dot 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
+.abbr{border:0;background:var(--violet-soft);color:var(--violet);border-radius:5px;padding:0 4px;cursor:pointer;font-weight:700}
+.abbr.open{background:var(--green-soft);color:var(--green)}
+
+/* classify */
+.cls{display:grid;gap:18px;justify-items:center;text-align:center}
+.cls-card{width:min(360px,100%);min-height:160px;border-radius:20px;background:var(--paper);border:2px solid var(--line);display:grid;place-content:center;gap:6px;padding:20px;transition:transform .35s ease,opacity .35s ease,border-color .2s}
+.cls-card .w{font-family:var(--display);font-weight:800;font-size:clamp(2rem,6vw,3rem)}
+.cls-card.goL{transform:translateX(-140px) rotate(-14deg);opacity:0}
+.cls-card.goR{transform:translateX(140px) rotate(14deg);opacity:0}
+.cls-card.enter{animation:rise .35s both}
+.facebtn{display:inline-flex;flex-direction:column;align-items:center;gap:4px;border:2px solid var(--line);background:var(--paper);border-radius:18px;padding:10px 22px;cursor:pointer;font-weight:700;transition:transform .15s}
+.facebtn:hover{transform:translateY(-3px);border-color:var(--ink)}
+.facebtn svg{width:54px;height:54px}
+
+/* matching */
+.match{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px}
+.mcol{display:grid;gap:10px;align-content:start}
+.mbtn{border:2px solid var(--line);background:var(--paper);border-radius:12px;padding:12px 14px;text-align:left;cursor:pointer;min-height:52px;transition:transform .15s,border-color .15s,background .2s}
+.mbtn.term{font-family:var(--display);font-weight:800;font-size:1.1rem}
+.mbtn:hover:not(:disabled){border-color:var(--ink)}
+.mbtn.sel{border-color:var(--accent);background:var(--accent-soft);transform:scale(1.02)}
+.mbtn.done{border-color:var(--green);background:var(--green-soft);color:var(--green);cursor:default}
+.mbtn.bad{border-color:var(--red);background:var(--red-soft)}
+
+/* flip cards */
+.flips{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.flip{perspective:900px;border:0;background:none;padding:0;cursor:pointer;height:170px;text-align:center}
+.flip .fi{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.3,.7,.2,1);transform-style:preserve-3d}
+.flip.on .fi{transform:rotateY(180deg)}
+.flip .fa,.flip .fb{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;display:grid;place-content:center;gap:6px;padding:14px}
+.flip .fa{background:var(--paper);border:2px solid var(--line)}
+.flip .fa .big{font-family:var(--display);font-weight:800;font-size:2rem}
+.flip .fa small{font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+.flip .fb{background:var(--ink);color:var(--bg);transform:rotateY(180deg);font-size:.95rem}
+.flip .fb b{font-family:var(--display);font-size:1.15rem}
+.flip .fb i{font-size:.85rem;opacity:.8}
+
+/* map */
+.mapwrap{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:28px;align-items:start}
+@media (max-width:760px){.mapwrap{grid-template-columns:1fr}.mapwrap .tmap{max-width:300px;margin:0 auto}}
+.tmap svg{width:100%;height:auto}
+.tile{cursor:pointer;transition:opacity .2s}
+.tile rect{transition:transform .2s,opacity .2s;transform-box:fill-box;transform-origin:center}
+.tile:hover rect,.tile:focus rect{transform:scale(1.08)}
+.tile text{font-family:var(--mono);font-size:13px;fill:var(--on-r);pointer-events:none;font-weight:500}
+.tmap.dim .tile{opacity:.25}
+.tmap.dim .tile.hi{opacity:1}
+.tile.flash rect{animation:pop .5s 2}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:.82rem}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:grid;gap:10px;min-height:260px;align-content:start}
+.panel .ph{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.panel ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.panel li{background:var(--bg);border-radius:8px;padding:8px 10px;animation:rise .4s both;animation-delay:calc(var(--i) * 50ms)}
+.panel li b{font-family:var(--display);font-weight:800;display:block}
+.panel li span{font-size:.86rem;color:var(--muted)}
+.regbtns{display:flex;flex-wrap:wrap;gap:8px}
+.regbtn{border:0;border-radius:999px;padding:9px 16px;font-weight:700;color:var(--on-r);cursor:pointer;transition:transform .15s}
+.regbtn:hover{transform:translateY(-2px)}
+.regbtn:disabled{opacity:.45;cursor:default;transform:none}
+.bigword{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,7vw,4rem);line-height:1}
+
+/* tf */
+.tf{display:grid;gap:16px;justify-items:center;text-align:center}
+.tfcard{width:min(460px,100%);height:210px;perspective:1000px}
+.tfcard .fi{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.tfcard.on .fi{transform:rotateY(180deg)}
+.tfcard .fa,.tfcard .fb{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;display:grid;place-content:center;gap:8px;padding:20px}
+.tfcard .fa{background:var(--paper);border:2px solid var(--line)}
+.tfcard .fa .big{font-family:var(--display);font-weight:800;font-size:clamp(1.4rem,4vw,2rem)}
+.tfcard .fb{transform:rotateY(180deg);border:2px solid}
+.tfcard .fb.ok{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.tfcard .fb.no{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.tfcard .fb b{font-family:var(--display);font-size:1.5rem}
+.tfcard .fb p{color:var(--ink)}
+
+/* fill */
+.fills{display:grid;gap:10px}
+.fill{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:grid;gap:8px}
+.fill .s{font-size:1.05rem}
+.blank{display:inline-block;min-width:90px;border-bottom:2px dashed var(--muted);text-align:center;font-weight:700;padding:0 6px}
+.blank.ok{border-bottom:2px solid var(--green);color:var(--green);background:var(--green-soft);border-radius:6px 6px 0 0;animation:pop .4s}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:4px 14px;cursor:pointer;font-weight:600}
+.chip:hover:not(:disabled){border-color:var(--ink)}
+.chip.bad{border-color:var(--red);color:var(--red)}
+.chip:disabled{opacity:.4;cursor:default}
+
+/* memory */
+.mem{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:640px;width:100%}
+@media (max-width:520px){.mem{grid-template-columns:repeat(3,1fr)}}
+.mcard{aspect-ratio:1/1;max-width:100%;perspective:800px;border:0;background:none;padding:0;cursor:pointer}
+.mcard .fi{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
+.mcard.on .fi,.mcard.done .fi{transform:rotateY(180deg)}
+.mcard .fa,.mcard .fb{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:12px;display:grid;place-content:center;padding:6px;text-align:center}
+.mcard .fa{background:repeating-linear-gradient(45deg,var(--accent) 0 10px,color-mix(in srgb,var(--accent) 80%,var(--bg)) 10px 20px);color:#fff;font-family:var(--display);font-weight:800;font-size:1.6rem}
+.mcard .fb{background:var(--paper);border:2px solid var(--line);transform:rotateY(180deg);font-size:clamp(.75rem,2.2vw,.95rem);font-weight:600}
+.mcard .fb.t{font-family:var(--display);font-weight:800;font-size:clamp(.95rem,2.8vw,1.25rem)}
+.mcard.done .fb{border-color:var(--green);background:var(--green-soft);color:var(--green)}
+
+/* red zone */
+.reds{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.redc{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:left;cursor:pointer;display:grid;gap:4px}
+.redc .term{font-family:var(--display);font-weight:800;font-size:1.3rem;filter:blur(7px);transition:filter .4s}
+.redc .m{font-size:.88rem;color:var(--muted);filter:blur(5px);transition:filter .4s}
+.redc.on .term,.redc.on .m{filter:none}
+.redc small{font-family:var(--mono);font-size:.68rem;color:var(--red)}
+
+/* quiz */
+.qz{display:grid;gap:16px;max-width:720px;width:100%}
+.qz .qbar{height:8px;background:var(--line);border-radius:999px;overflow:hidden}
+.qz .qbar i{display:block;height:100%;background:var(--accent);transition:width .4s}
+.qz .qt{font-family:var(--display);font-weight:800;font-size:clamp(1.3rem,3.4vw,1.9rem)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.opt{text-align:left;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--paper);cursor:pointer;font-weight:600;transition:transform .15s}
+.opt:hover:not(:disabled){border-color:var(--ink);transform:translateY(-2px)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--green);background:var(--green-soft);color:var(--green)}
+.opt.wrong{border-color:var(--red);background:var(--red-soft);color:var(--red)}
+.medal{width:150px;margin:0 auto;animation:rise .6s both}
+
+/* glossary */
+.gsearch{width:100%;max-width:420px;font:inherit;padding:10px 16px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.gsec h3{margin:18px 0 10px;font-size:1rem;font-family:var(--mono);font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sources{columns:2 280px;gap:24px;font-size:.86rem;color:var(--muted);padding-left:18px;margin:0}
+.sources li{break-inside:avoid;margin-bottom:5px}
+
+#fx{position:fixed;inset:0;pointer-events:none;z-index:40}
+@media (prefers-reduced-motion:reduce){
+  .slide,.slide.active{transition:none;transform:none}
+  .slide.active .rv,.bub,.msg,.panel li,.typing i{animation:none}
+  .flip .fi,.tfcard .fi,.mcard .fi,.cls-card{transition:none}
+}
+</style>
+</head>
+<body>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="deck" id="deck">
+
+<!-- 1 portada -->
+<section class="slide" id="inicio" data-t="Portada">
+  <div class="inner cover">
+    <div class="cover-grid">
+      <div class="head" style="gap:14px">
+        <div class="eyebrow rv">Clase de portugués brasileño · para hispanohablantes · A2–B2</div>
+        <h1 class="rv" style="--i:1">E aí, <span class="q">beleza?</span></h1>
+        <p class="rv" style="--i:2;font-size:1.15rem;max-width:46ch">Las <b>gírias</b> de Brasil en 23 diapositivas: vocabulario por temas, un mapa interactivo y 11 actividades para practicar.</p>
+        <div class="row rv" style="--i:3"><button class="btn primary" type="button" data-go="1">Empezar la clase →</button><span class="muted" style="font-size:.85rem">Usa las flechas del teclado o desliza.</span></div>
+      </div>
+      <div class="bubbles rv" style="--i:2" aria-hidden="true">
+        <span class="bub b1" style="left:4%;top:4%;--d:0s;--r:-3deg">Sextou!</span>
+        <span class="bub b2" style="left:52%;top:0%;--d:.7s;--r:2deg">uai</span>
+        <span class="bub b3" style="left:30%;top:24%;--d:1.3s;--r:-2deg">mó legal</span>
+        <span class="bub b4" style="left:66%;top:30%;--d:.4s;--r:3deg">kkkk</span>
+        <span class="bub b5" style="left:6%;top:46%;--d:1.8s;--r:2deg">bah, tchê</span>
+        <span class="bub b6" style="left:46%;top:56%;--d:1s;--r:-3deg">oxe!</span>
+        <span class="bub b1" style="left:14%;top:74%;--d:2.2s;--r:3deg">partiu</span>
+        <span class="bub b3" style="left:58%;top:80%;--d:.2s;--r:-2deg">valeu!</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 qué es -->
+<section class="slide" id="que-es" data-t="¿Qué es una gíria?">
+  <div class="inner">
+    <div class="head"><div class="eyebrow rv">Introducción</div><h2 class="rv" style="--i:1">¿Qué es una gíria?</h2><p class="rv muted" style="--i:2">Jerga, argot o modismo: palabras informales que nacen en un grupo (jóvenes, una ciudad, internet) y se extienden. Mira cómo cambia un mismo saludo según el registro.</p></div>
+    <figure class="thermo rv" style="--i:3">
+      <div class="barg"></div>
+      <div class="stops">
+        <div class="st"><b style="color:var(--blue)">Formal</b><span>Olá, como vai o senhor?</span><small>Trabajo, desconocidos</small></div>
+        <div class="st"><b style="color:var(--green)">Coloquial</b><span>Oi, tudo bem?</span><small>Todo el mundo</small></div>
+        <div class="st"><b style="color:var(--ochre)">Gíria</b><span>E aí, beleza?</span><small>Amigos, redes</small></div>
+        <div class="st"><b style="color:var(--red)">Vulgar</b><span>Fala, porra!</span><small>Solo con mucha confianza</small></div>
+      </div>
+      <figcaption>Termómetro del registro: cuanto más a la derecha, más informal.</figcaption>
+    </figure>
+    <div class="notes">
+      <div class="note rv" style="--i:4"><h3>Varía por región</h3><p>Lo que en Río es «maneiro», en São Paulo es «da hora» y en Recife es «massa».</p></div>
+      <div class="note rv" style="--i:5"><h3>Cambia rápido</h3><p>Algunas palabras duran décadas («legal»), otras un verano («six-seven»).</p></div>
+      <div class="note rv" style="--i:6"><h3>Regla de oro</h3><p>Si el otro te habla con gírias, puedes responder igual. En contextos formales, evítalas.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 habla reducida -->
+<section class="slide" id="habla" data-t="Habla reducida">
+  <div class="inner">
+    <div class="head"><div class="act-badge rv">Actividad 1 · Toca para transformar</div><h2 class="rv" style="--i:1">Así suena de verdad</h2><p class="rv muted" style="--i:2">El brasileño acorta las palabras al hablar. Toca cada tarjeta para ver la forma de la calle.</p></div>
+    <div class="morphs rv" style="--i:3" id="morphs"></div>
+    <div class="row rv" style="--i:4"><button class="btn" type="button" id="morphAll">Transformar todas</button></div>
+  </div>
+</section>
+
+<!-- 4 saludos -->
+<section class="slide" id="saludos" data-t="Saludos y despedidas">
+  <div class="inner">
+    <div class="split">
+      <figure class="rv">
+        <svg viewBox="0 0 220 200" role="img" aria-label="Dos personas saludándose con globos de diálogo">
+          <rect x="10" y="10" width="110" height="46" rx="20" fill="var(--accent)"/><path d="M40 56 L34 72 L56 56Z" fill="var(--accent)"/>
+          <text x="65" y="40" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="20" fill="#fff">E aí?</text>
+          <rect x="100" y="64" width="110" height="46" rx="20" fill="var(--green-soft)"/><path d="M180 110 L186 126 L164 110Z" fill="var(--green-soft)"/>
+          <text x="155" y="94" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="18" fill="var(--green)">Beleza!</text>
+          <circle cx="50" cy="150" r="26" fill="var(--ochre-soft)" stroke="var(--ink)" stroke-width="2"/><circle cx="42" cy="146" r="3" fill="var(--ink)"/><circle cx="58" cy="146" r="3" fill="var(--ink)"/><path d="M40 158 Q50 167 60 158" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="170" cy="160" r="26" fill="var(--blue-soft)" stroke="var(--ink)" stroke-width="2"/><circle cx="162" cy="156" r="3" fill="var(--ink)"/><circle cx="178" cy="156" r="3" fill="var(--ink)"/><path d="M160 168 Q170 177 180 168" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </figure>
+      <div style="display:grid;gap:16px;min-width:0">
+        <div class="head"><div class="eyebrow rv">Tema 1</div><h2 class="rv" style="--i:1">Saludos, despedidas y cómo llamar a alguien</h2></div>
+        <div class="words" data-words="saludos" data-n="12"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 chat -->
+<section class="slide" id="chat" data-t="Chat animado">
+  <div class="inner">
+    <div class="chatwrap">
+      <div class="phone rv">
+        <div class="top">
+          <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="14" cy="20" r="12" fill="var(--blue-soft)" stroke="var(--blue)" stroke-width="2"/><circle cx="27" cy="20" r="12" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/></svg>
+          <div><b>Lucas e Bia</b><small id="chatStatus">en línea</small></div>
+        </div>
+        <div class="msgs" id="msgs" aria-live="polite"></div>
+      </div>
+      <div style="display:grid;gap:14px;align-content:start">
+        <div class="act-badge rv" style="--i:1">Actividad 2 · Lee y descubre</div>
+        <h2 class="rv" style="--i:2">El plan del viernes</h2>
+        <p class="rv muted" style="--i:3">Lucas es de Río y Bia de São Paulo. Lee el chat mientras llega. ¿Lo entiendes? <b>Toca cualquier mensaje</b> para ver la traducción.</p>
+        <div class="row rv" style="--i:4"><button class="btn primary" type="button" id="chatReplay">Volver a reproducir</button><button class="btn" type="button" id="chatTr">Traducir todo</button></div>
+        <div class="note rv" style="--i:5"><h3>Busca en el chat</h3><p>sextou · ralei · trampo · rolé · lisa · 0800 · racha · gelada · da hora · furou · vacilão · crush · segurar vela · zoar · dando mole · der ruim · já é · tmj</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 bueno/malo -->
+<section class="slide" id="bueno-malo" data-t="¡Qué bueno! ¡Qué mal!">
+  <div class="inner">
+    <div class="head"><div class="eyebrow rv">Tema 2</div><h2 class="rv" style="--i:1">¡Qué bueno! / ¡Qué mal!</h2><p class="rv muted" style="--i:2">Para elogiar («chévere», «guay», «bacán») y para quejarse. Memoriza tres de cada lado.</p></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px">
+      <div style="display:grid;gap:10px;align-content:start"><h3 class="rv" style="--i:3;color:var(--green)">Positivo</h3><div class="words" data-words="bueno" data-n="8"></div></div>
+      <div style="display:grid;gap:10px;align-content:start"><h3 class="rv" style="--i:3;color:var(--red)">Negativo</h3><div class="words" data-words="malo" data-n="8"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 clasifica -->
+<section class="slide" id="clasifica" data-t="Clasifica">
+  <div class="inner">
+    <div class="head" style="margin:0 auto;text-align:center;justify-items:center"><div class="act-badge rv">Actividad 3 · Clasifica</div><h2 class="rv" style="--i:1">¿Bueno o malo?</h2><p class="rv muted" style="--i:2">Decide si cada gíria expresa algo positivo o negativo.</p></div>
+    <div class="cls rv" style="--i:3">
+      <div class="score"><span id="clsN">1</span>/<span id="clsT">12</span> · aciertos: <span id="clsOk">0</span></div>
+      <div class="cls-card" id="clsCard"><span class="w" id="clsW">legal</span><span class="muted" id="clsHint">¿Positivo o negativo?</span></div>
+      <p class="feedback" id="clsFb" aria-live="polite"></p>
+      <div class="row" style="justify-content:center">
+        <button class="facebtn" type="button" data-cls="0"><svg viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="24" fill="var(--red-soft)" stroke="var(--red)" stroke-width="2.5"/><circle cx="19" cy="22" r="3" fill="var(--red)"/><circle cx="35" cy="22" r="3" fill="var(--red)"/><path d="M17 38 Q27 29 37 38" fill="none" stroke="var(--red)" stroke-width="3" stroke-linecap="round"/></svg>Negativo</button>
+        <button class="facebtn" type="button" data-cls="1"><svg viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="24" fill="var(--green-soft)" stroke="var(--green)" stroke-width="2.5"/><circle cx="19" cy="22" r="3" fill="var(--green)"/><circle cx="35" cy="22" r="3" fill="var(--green)"/><path d="M17 32 Q27 42 37 32" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round"/></svg>Positivo</button>
+      </div>
+      <button class="btn" type="button" id="clsReset" hidden>Jugar otra vez</button>
+    </div>
+  </div>
+</section>
+
+<!-- 8 fiesta -->
+<section class="slide" id="fiesta" data-t="Fiesta y amor">
+  <div class="inner">
+    <div class="split">
+      <figure class="rv">
+        <svg viewBox="0 0 220 200" role="img" aria-label="Vasos brindando con confeti">
+          <g transform="rotate(-14 80 120)"><path d="M55 70 H105 L98 170 H62Z" fill="var(--ochre-soft)" stroke="var(--ink)" stroke-width="2.5"/><path d="M58 92 H102 L98 170 H62Z" fill="var(--ochre)"/><ellipse cx="80" cy="72" rx="26" ry="9" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/></g>
+          <g transform="rotate(14 140 120)"><path d="M115 70 H165 L158 170 H122Z" fill="var(--ochre-soft)" stroke="var(--ink)" stroke-width="2.5"/><path d="M118 92 H162 L158 170 H122Z" fill="var(--ochre)"/><ellipse cx="140" cy="72" rx="26" ry="9" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/></g>
+          <circle cx="110" cy="30" r="5" fill="var(--accent)"/><rect x="70" y="20" width="10" height="5" fill="var(--blue)" transform="rotate(30 75 22)"/><rect x="140" y="26" width="10" height="5" fill="var(--green)" transform="rotate(-25 145 28)"/><circle cx="170" cy="46" r="4" fill="var(--violet)"/><circle cx="46" cy="44" r="4" fill="var(--green)"/>
+          <text x="110" y="196" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="18" fill="var(--accent)">Saúde!</text>
+        </svg>
+      </figure>
+      <div style="display:grid;gap:16px;min-width:0">
+        <div class="head"><div class="eyebrow rv">Tema 3</div><h2 class="rv" style="--i:1">Fiesta, amigos y relaciones</h2></div>
+        <div class="words" data-words="social" data-n="12"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 dinero -->
+<section class="slide" id="dinero" data-t="Dinero y trabajo">
+  <div class="inner">
+    <div class="split">
+      <figure class="rv">
+        <svg viewBox="0 0 220 200" role="img" aria-label="Billete de diez reales con sus apodos">
+          <rect x="20" y="60" width="180" height="84" rx="8" fill="var(--green-soft)" stroke="var(--green)" stroke-width="2.5"/>
+          <rect x="30" y="70" width="160" height="64" rx="4" fill="none" stroke="var(--green)" stroke-width="1" stroke-dasharray="3 3"/>
+          <circle cx="70" cy="102" r="20" fill="none" stroke="var(--green)" stroke-width="2"/>
+          <text x="70" y="108" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="15" fill="var(--green)">R$</text>
+          <text x="148" y="114" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="36" fill="var(--green)">10</text>
+          <text x="40" y="36" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="16" fill="var(--accent)">dez conto</text>
+          <text x="130" y="30" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="16" fill="var(--blue)">dez paus</text>
+          <text x="60" y="176" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="16" fill="var(--violet)">dez pila</text>
+          <text x="140" y="186" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="14" fill="var(--muted)">(RS)</text>
+        </svg>
+        <figcaption>El real tiene apodos: conto, pau, pila.</figcaption>
+      </figure>
+      <div style="display:grid;gap:16px;min-width:0">
+        <div class="head"><div class="eyebrow rv">Tema 4</div><h2 class="rv" style="--i:1">Dinero y trabajo</h2></div>
+        <div class="words" data-words="grana" data-n="12"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 une -->
+<section class="slide" id="une" data-t="Une las parejas">
+  <div class="inner">
+    <div class="head"><div class="act-badge rv">Actividad 4 · Une las parejas</div><h2 class="rv" style="--i:1">¿Qué significa cada una?</h2><p class="rv muted" style="--i:2">Toca una gíria a la izquierda y después su significado a la derecha.</p></div>
+    <div class="row rv" style="--i:3"><span class="score">Parejas: <span id="mOk">0</span>/6</span><button class="btn" type="button" id="mNew">Nueva ronda</button></div>
+    <div class="match rv" style="--i:3"><div class="mcol" id="mL"></div><div class="mcol" id="mR"></div></div>
+  </div>
+</section>
+
+<!-- 11 verbos -->
+<section class="slide" id="verbos" data-t="Verbos de la calle">
+  <div class="inner">
+    <div class="head"><div class="eyebrow rv">Tema 5</div><h2 class="rv" style="--i:1">Verbos de la calle</h2><p class="rv muted" style="--i:2">Muchos verbos normales tienen un segundo sentido en jerga.</p></div>
+    <div class="words" data-words="verbos" data-n="15"></div>
+  </div>
+</section>
+
+<!-- 12 interjecciones flip -->
+<section class="slide" id="interjecciones" data-t="Interjecciones">
+  <div class="inner">
+    <div class="head"><div class="act-badge rv">Actividad 5 · Tarjetas giratorias</div><h2 class="rv" style="--i:1">El sonido de Brasil</h2><p class="rv muted" style="--i:2">Intenta adivinar qué expresa cada interjección y después gira la tarjeta.</p></div>
+    <div class="flips" id="flipsI"></div>
+  </div>
+</section>
+
+<!-- 13 mapa -->
+<section class="slide" id="mapa" data-t="Mapa de las gírias">
+  <div class="inner">
+    <div class="head"><div class="eyebrow rv">Tema 6 · mapa interactivo</div><h2 class="rv" style="--i:1">El mapa de las gírias</h2><p class="rv muted" style="--i:2">Cada cuadrado es un estado. Toca uno para ver las gírias de esa zona.</p></div>
+    <div class="mapwrap">
+      <div class="rv" style="--i:3;display:grid;gap:10px"><div class="tmap" id="map1"></div><div class="legend" id="legend1"></div></div>
+      <div class="panel rv" style="--i:4" id="panel" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 14 de donde -->
+<section class="slide" id="de-donde" data-t="¿De dónde es?">
+  <div class="inner">
+    <div class="mapwrap">
+      <div class="rv" style="--i:3"><div class="tmap" id="map2"></div></div>
+      <div style="display:grid;gap:16px;align-content:start">
+        <div class="act-badge rv">Actividad 6 · Adivina la región</div>
+        <h2 class="rv" style="--i:1">¿De dónde es esta gíria?</h2>
+        <div class="rv" style="--i:2;display:grid;gap:6px"><span class="muted" id="rgN">Palabra 1 de 12</span><span class="bigword" id="rgW">uai</span><span class="muted" id="rgM"></span></div>
+        <div class="regbtns rv" style="--i:3" id="rgBtns"></div>
+        <p class="feedback" id="rgFb" aria-live="polite"></p>
+        <div class="row"><span class="score">Aciertos: <span id="rgOk">0</span></span><button class="btn primary" type="button" id="rgNext" hidden>Siguiente</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 15 internet -->
+<section class="slide" id="internet" data-t="Internet y abreviaturas">
+  <div class="inner">
+    <div class="chatwrap">
+      <div class="phone rv">
+        <div class="top"><svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="16" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--violet)">kk</text></svg><div><b>Grupo da galera</b><small>5 participantes</small></div></div>
+        <div class="msgs" id="imsgs" style="height:auto;min-height:300px"></div>
+      </div>
+      <div style="display:grid;gap:14px;align-content:start">
+        <div class="act-badge rv" style="--i:1">Actividad 7 · Descifra el mensaje</div>
+        <h2 class="rv" style="--i:2">Internet y WhatsApp</h2>
+        <p class="rv muted" style="--i:3">En Brasil nadie escribe «jajaja»: la risa es <b>kkkk</b>. Toca las palabras en morado para descifrarlas.</p>
+        <div class="row rv" style="--i:4"><span class="score">Descifradas: <span id="abN">0</span>/<span id="abT">0</span></span><button class="btn" type="button" id="abAll">Descifrar todo</button></div>
+        <div class="words" data-words="internet" data-n="9" data-from="15"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 16 falsos -->
+<section class="slide" id="falsos" data-t="Falsos amigos">
+  <div class="inner">
+    <div class="head" style="margin:0 auto;text-align:center;justify-items:center"><div class="act-badge rv">Actividad 8 · ¿Verdadero o falso?</div><h2 class="rv" style="--i:1">Falsos amigos</h2><p class="rv muted" style="--i:2">Palabras que parecen españolas pero engañan. ¿La frase es verdadera o falsa?</p></div>
+    <div class="tf rv" style="--i:3">
+      <span class="score"><span id="tfN">1</span>/<span id="tfT">12</span> · aciertos: <span id="tfOk">0</span></span>
+      <div class="tfcard" id="tfCard"><div class="fi"><div class="fa"><span class="muted">En portugués…</span><span class="big" id="tfQ"></span></div><div class="fb" id="tfB"><b id="tfR"></b><p id="tfE"></p></div></div></div>
+      <div class="row" style="justify-content:center" id="tfBtns"><button class="btn" type="button" data-tf="1">Verdadero</button><button class="btn" type="button" data-tf="0">Falso</button></div>
+      <button class="btn primary" type="button" id="tfNext" hidden>Siguiente</button>
+    </div>
+  </div>
+</section>
+
+<!-- 17 expresiones flip -->
+<section class="slide" id="expresiones" data-t="Expresiones idiomáticas">
+  <div class="inner">
+    <div class="head"><div class="act-badge rv">Actividad 9 · Literal vs. real</div><h2 class="rv" style="--i:1">Expresiones idiomáticas</h2><p class="rv muted" style="--i:2">Delante ves la traducción literal (absurda). Gira la tarjeta para ver lo que significa de verdad.</p></div>
+    <div class="flips" id="flipsE"></div>
+  </div>
+</section>
+
+<!-- 18 completa -->
+<section class="slide" id="completa" data-t="Completa la frase">
+  <div class="inner">
+    <div class="head"><div class="act-badge rv">Actividad 10 · Completa</div><h2 class="rv" style="--i:1">Completa la frase</h2><p class="rv muted" style="--i:2">Elige la gíria que encaja en cada hueco. <span class="score" style="font-size:1rem">Resueltas: <span id="fOk">0</span>/<span id="fT">0</span></span></p></div>
+    <div class="fills rv" style="--i:3" id="fills"></div>
+  </div>
+</section>
+
+<!-- 19 memoria -->
+<section class="slide" id="memoria" data-t="Juego de memoria">
+  <div class="inner" style="align-items:center">
+    <div class="head" style="text-align:center;justify-items:center"><div class="act-badge rv">Actividad 11 · Memoria</div><h2 class="rv" style="--i:1">Encuentra las parejas</h2><p class="rv muted" style="--i:2">Gira dos cartas: una gíria y su significado.</p></div>
+    <div class="row rv" style="--i:3;justify-content:center"><span class="score">Intentos: <span id="memMoves">0</span> · Parejas: <span id="memOk">0</span>/6</span><button class="btn" type="button" id="memNew">Barajar</button></div>
+    <div class="mem rv" style="--i:4" id="mem"></div>
+  </div>
+</section>
+
+<!-- 20 zona roja -->
+<section class="slide" id="zona-roja" data-t="Zona roja">
+  <div class="inner">
+    <div class="head"><div class="eyebrow rv" style="color:var(--red)">Solo para reconocer</div><h2 class="rv" style="--i:1">Zona roja: tacos</h2><p class="rv muted" style="--i:2">Los vas a oír en la calle y en el fútbol. Están tapados: toca para verlos. Úsalos con mucho cuidado.</p></div>
+    <div class="reds rv" style="--i:3" id="reds"></div>
+  </div>
+</section>
+
+<!-- 21 quiz -->
+<section class="slide" id="quiz" data-t="Quiz final">
+  <div class="inner" style="align-items:center">
+    <div class="head" style="text-align:center;justify-items:center"><div class="act-badge rv">Evaluación final</div><h2 class="rv" style="--i:1">Quiz: ¿ya hablas como un brasileño?</h2></div>
+    <div class="qz rv" style="--i:2" id="qz"></div>
+  </div>
+</section>
+
+<!-- 22 glosario -->
+<section class="slide" id="glosario" data-t="Glosario completo">
+  <div class="inner" style="justify-content:flex-start">
+    <div class="head"><div class="eyebrow">Material de consulta</div><h2>Glosario completo</h2><p class="muted">Todas las palabras de la clase, con ejemplo y traducción.</p></div>
+    <input class="gsearch" id="gq" type="search" placeholder="Buscar: treta, uai, grana…" aria-label="Buscar en el glosario">
+    <div id="gloss"></div>
+  </div>
+</section>
+
+<!-- 23 cierre -->
+<section class="slide" id="fin" data-t="Valeu!">
+  <div class="inner">
+    <div class="cover"><h1 class="rv">Valeu, <span class="q">galera!</span></h1></div>
+    <p class="rv" style="--i:1;font-size:1.1rem;max-width:60ch">Tarea: esta semana usa cinco gírias nuevas con un amigo brasileño o en un comentario en redes. Y recuerda: <i>sextou</i> todos los viernes.</p>
+    <div class="row rv" style="--i:2"><button class="btn primary" type="button" data-go="0">Volver al inicio</button><button class="btn" type="button" data-go="20">Repetir el quiz</button></div>
+    <div class="rv" style="--i:3;display:grid;gap:10px">
+      <h3>Fuentes consultadas</h3>
+      <ul class="sources">
+        <li><a href="https://www.todamateria.com.br/girias-de-cada-regiao-do-brasil-dicionario-regionalista/">Toda Matéria · Gírias de cada região</a></li>
+        <li><a href="https://querobolsa.com.br/revista/o-que-e-giria-regional-conheca-as-mais-populares-do-brasil">Quero Bolsa · Gírias regionais</a></li>
+        <li><a href="https://concursosnobrasil.com/artigo/do-norte-ao-sul-confira-15-girias-brasileiras-e-os-seus-significados/">Concursos no Brasil · 15 gírias</a></li>
+        <li><a href="https://concursosnobrasil.com/artigo/conheca-9-novas-girias-que-estao-dominando-a-internet-no-brasil/">Concursos no Brasil · Gírias da internet</a></li>
+        <li><a href="https://blog.blablacar.com.br/dicas/girias-mineiras">BlaBlaCar · Gírias mineiras</a></li>
+        <li><a href="https://blog.blablacar.com.br/dicas/girias-de-sp">BlaBlaCar · Gírias de SP</a></li>
+        <li><a href="https://caminhoslanguages.com/blog/the-ultimate-list-of-carioca-slang/">Caminhos Languages · Carioca slang</a></li>
+        <li><a href="https://platzi.com/cursos/portugues-cotidiano/girias-do-portugues-brasileiro/">Platzi · Gírias do português</a></li>
+        <li><a href="https://www.mosalingua.com/es/expresiones-coloquiales-en-portugues-brasileno/">MosaLingua · Expresiones coloquiales</a></li>
+        <li><a href="https://babbel.com/en/magazine/brazilian-dialects">Babbel · Brazilian dialects</a></li>
+        <li><a href="https://www.dicio.com.br/role/">Dicio · Rolê</a></li>
+        <li><a href="https://jcconcursos.com.br/noticia/brasil/girias-da-geracao-z-dicionario-como-expressoes-como-crush-e-braba-viraram-palavras-oficiais-135688">JC Concursos · Gírias no dicionário</a></li>
+        <li><a href="https://www.band.com.br/noticias/fomo-orbiting-e-delulu-significado-das-expressoes-da-geracao-z-202503171210">Band · Gírias da Geração Z</a></li>
+        <li><a href="https://mais.opovo.com.br/reportagens-especiais/2026/06/13/o-que-significa-farmar-aura-e-tankar-entenda-termos-da-geracao-z.html">O Povo · Farmar aura e tankar</a></li>
+        <li><a href="https://www.tecmundo.com.br/voxel/504895-o-que-significa-farmar-aura-e-qual-a-relacao-do-termo-com-games-como-roblox.htm">TecMundo · Farmar aura</a></li>
+        <li><a href="https://www.opovo.com.br/noticias/curiosidades/2023/02/17/hablo-mesmo-veja-guia-para-entender-siglas-expressoes-e-girias-da-geracao-z-na-internet.html">O Povo · Siglas da internet</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<nav class="bar" aria-label="Navegación de diapositivas">
+  <div class="prog" id="prog"></div>
+  <button class="navbtn" type="button" id="prev" aria-label="Diapositiva anterior">←</button>
+  <button class="navbtn" type="button" id="menuBtn" aria-label="Índice de diapositivas">☰</button>
+  <span class="slidename" id="sname"></span>
+  <button class="navbtn next" type="button" id="next">Siguiente →</button>
+</nav>
+<div class="menu" id="menu" hidden><div class="mi"><div class="row" style="justify-content:space-between"><h2>Índice</h2><button class="btn" type="button" id="menuClose">Cerrar</button></div><ol id="menuList"></ol></div></div>
+
+<script>
+/* ======== DATOS ======== */
+const D = {
+saludos:[
+["E aí?","¿Qué tal? / ¿Qué onda? El saludo informal por excelencia.","E aí, tudo bem?","¿Qué tal, todo bien?","p"],
+["Beleza? / Blz","¿Todo bien? También «vale, de acuerdo».","— Te vejo às oito. — Beleza!","— Te veo a las ocho. — ¡Vale!","p"],
+["De boa / Suave","Tranquilo, sin problema.","Tô de boa, só descansando.","Estoy tranqui, solo descansando.","g"],
+["Cara","Tío, güey, boludo, pana, parce.","Cara, você não vai acreditar.","Tío, no te lo vas a creer.","p"],
+["Mano / Mana","Hermano, colega.","Mano, que calor!","¡Hermano, qué calor!","r:SP"],
+["Véi / Velho","Tío, colega (sin relación con la edad).","Véi, cê viu o jogo?","Tío, ¿viste el partido?","r:DF/MG"],
+["Mermão","Contracción de «meu irmão».","Qual é, mermão?","¿Qué pasa, hermano?","r:RJ"],
+["Galera","La gente, la peña, el grupo.","Cadê a galera?","¿Dónde está la peña?","p"],
+["Valeu! / Vlw","¡Gracias! También despedida.","Valeu pela ajuda!","¡Gracias por la ayuda!","p"],
+["Falou! / Flw","¡Chao!","Falou, até amanhã!","¡Chao, hasta mañana!","g"],
+["Tamo junto / Tmj","Cuenta conmigo; gracias; un abrazo.","Precisando, tamo junto!","Si necesitas algo, ¡aquí estoy!","g"],
+["Fui!","«Me voy» (lit. «fui»).","Tá tarde, fui!","Es tarde, ¡me piro!","g"],
+["Firmeza","Todo bien, de acuerdo.","Firmeza, mano.","Todo bien, hermano.","r:SP"],
+["Parça / Parceiro","Compa, amigo fiel.","Ele é meu parça.","Es mi compa.","g"],
+["Gente!","«¡Madre mía!» o «chicos».","Gente, que lindo!","¡Madre mía, qué bonito!","p"]
+],
+bueno:[
+["Legal","Chévere, guay, bacán, chido.","Que legal, adorei!","¡Qué guay, me encantó!","p"],
+["Maneiro","Guay, genial.","Teu tênis é maneiro.","Tus zapatillas son geniales.","r:RJ"],
+["Da hora","Genial, chulo.","O show foi da hora!","¡El concierto estuvo genial!","r:SP"],
+["Massa","Genial, buenísimo.","Massa demais essa praia!","¡Esta playa está buenísima!","r:NE"],
+["Irado","Increíble, brutal.","Que golaço irado!","¡Qué golazo brutal!","g"],
+["Brabo / Braba","Muy bueno, crack.","Ela é braba no violão.","Es una crack con la guitarra.","g"],
+["Tri","«Muy». «Tri legal» = muy guay.","Bah, tri bom!","¡Uf, buenísimo!","r:RS"],
+["Show de bola","Excelente, de diez.","A festa foi show de bola.","La fiesta fue de diez.","p"],
+["Top","Lo mejor.","Esse lugar é top.","Este sitio es top.","g"],
+["Sinistro","Impresionante (bueno o malo).","O cara joga sinistro!","¡Juega impresionante!","r:RJ"],
+["Arrasou!","¡Lo bordaste!","Arrasou na apresentação!","¡Bordaste la presentación!","g"],
+["Mitou","Hizo algo legendario.","Gol de bicicleta? Mitou!","¿Gol de chilena? ¡Leyenda!","i"]
+],
+malo:[
+["Chato / Chata","Pesado, aburrido. Nunca «plano».","Que chato, choveu.","Qué rollo, llovió.","p"],
+["Treta","Pelea, lío, drama.","Rolou mó treta.","Hubo un lío enorme.","g"],
+["Perrengue","Apuro, odisea.","Passei um perrengue.","Pasé un apuro.","g"],
+["Deu ruim","Salió mal.","Esqueci a chave. Deu ruim.","Olvidé la llave. Se torció.","g"],
+["Mico","Ridículo. «Pagar mico».","Que mico!","¡Qué ridículo!","g"],
+["Vacilo / Vacilão","Metedura de pata; persona que falla.","Não avisar foi vacilo.","No avisar fue una cagada.","g"],
+["Zica","Mala suerte.","Que zica!","¡Qué mala suerte!","g"],
+["Pistola","Furioso.","Fiquei pistola.","Me puse furioso.","g"],
+["Ranço","Manía, asco a alguien.","Peguei ranço dele.","Le cogí manía.","i"],
+["Cringe","Vergüenza ajena.","Que cringe!","¡Qué vergüenza ajena!","i"],
+["Tá osso","Está difícil, chungo.","Achar emprego tá osso.","Encontrar trabajo está chungo.","g"],
+["Brega / Cafona","Cursi, hortera.","Que roupa cafona!","¡Qué ropa más hortera!","p"]
+],
+social:[
+["Rolê / Rolé","Salida, vuelta, plan.","Bora dar um rolê?","¿Damos una vuelta?","g"],
+["Balada","Fiesta en discoteca.","Sábado tem balada?","¿El sábado hay fiesta?","r:SP"],
+["Rolar","Pasar, ocurrir.","Vai rolar churrasco.","Va a haber asado.","g"],
+["Partiu!","¡Vamos!","Partiu praia!","¡A la playa!","g"],
+["Sextou!","¡Por fin viernes!","Sextou! Partiu happy hour.","¡Viernes! A tomar algo.","g"],
+["Ficar","Liarse con alguien sin compromiso.","Eles ficaram na festa.","Se liaron en la fiesta.","g"],
+["Crush","Persona que te gusta.","Meu crush curtiu minha foto!","¡Mi crush le dio like a mi foto!","i"],
+["Dar mole","Dar señales a alguien.","Ela tá te dando mole!","¡Te está tirando los tejos!","g"],
+["Levar um toco","Recibir calabazas.","Levei um toco.","Me dieron calabazas.","g"],
+["Segurar vela","Hacer de sujetavelas.","Não vou segurar vela.","No voy de sujetavelas.","p"],
+["Zoeira","Cachondeo, guasa.","É só zoeira!","¡Es de broma!","g"],
+["Gelada / Breja","Cerveza.","Desce uma gelada!","¡Ponme una birra!","g"],
+["Esquenta","La previa.","O esquenta é lá em casa.","La previa es en mi casa.","g"],
+["Furar","Cancelar a última hora.","Ele furou o rolê.","Canceló el plan.","g"],
+["Dar o cano","Dejar plantado.","Ela me deu o cano.","Me dejó plantado.","p"],
+["Fofoca","Chisme.","Me conta a fofoca!","¡Cuéntame el chisme!","p"]
+],
+grana:[
+["Grana","Dinero: plata, pasta, lana.","Tô sem grana.","Estoy sin pasta.","g"],
+["Conto / Pau","Real. «Dez conto», «cem paus».","Me empresta vinte conto?","¿Me prestas veinte pavos?","g"],
+["Liso / Duro","Sin dinero.","Tô liso.","Estoy pelado.","g"],
+["Mão de vaca","Tacaño.","Ele é mão de vaca.","Es un rácano.","p"],
+["0800 / Na faixa","Gratis.","A entrada é 0800!","¡La entrada es gratis!","g"],
+["Salgado","Caro (lit. «salado»).","Tá salgado!","¡Está carísimo!","p"],
+["Trampo","Curro, trabajo.","Tô no trampo.","Estoy en el curro.","r:SP"],
+["Bico","Trabajo extra, changa.","Faço uns bicos.","Hago chapuzas.","p"],
+["Ralar","Trabajar muy duro.","Ralei o ano todo.","Curré todo el año.","g"],
+["Rachar a conta","Pagar a medias.","Vamos rachar?","¿A medias?","p"],
+["Vaquinha","Colecta («hacer una vaca»).","Fizemos uma vaquinha.","Hicimos una vaca.","p"],
+["Gambiarra","Apaño improvisado.","Consertei com gambiarra.","Lo arreglé con un apaño.","p"],
+["Puxa-saco","Pelota, lameculos.","Puxa-saco do chefe.","El pelota del jefe.","g"],
+["Abacaxi","Problema, marrón (lit. «piña»).","Que abacaxi!","¡Qué marrón!","p"]
+],
+verbos:[
+["Zoar","Burlarse; pasarlo bien.","Para de me zoar!","¡Deja de vacilarme!","g"],
+["Curtir","Disfrutar; dar «like».","Curti a viagem.","Disfruté el viaje.","p"],
+["Sacar","Entender, pillar.","Sacou?","¿Lo pillas?","g"],
+["Se ligar","Prestar atención.","Se liga nisso!","¡Ojo con esto!","g"],
+["Manjar","Saber mucho de algo.","Ele manja de futebol.","Controla de fútbol.","g"],
+["Mandar bem","Hacerlo genial.","Mandou bem!","¡Lo hiciste genial!","g"],
+["Pisar na bola","Meter la pata.","Pisei na bola.","Metí la pata.","p"],
+["Encher o saco","Molestar, hartar.","Não enche!","¡No fastidies!","p"],
+["Dar um migué","Poner una excusa.","Deu um migué.","Puso una excusa.","g"],
+["Cair a ficha","Caer en la cuenta.","Caiu a ficha.","Caí en la cuenta.","p"],
+["Chutar","Adivinar al azar.","Chutei a resposta.","Contesté al azar.","p"],
+["Vazar","Irse, largarse.","Vou vazar.","Me piro.","g"],
+["Pirar","Flipar, volverse loco.","Pirei!","¡Flipé!","g"],
+["Tankar","Aguantar (del inglés «tank»).","Não tanko mais.","Ya no lo aguanto.","i"],
+["Farmar aura","Ganar carisma con algo memorable.","Foi de terno só pra farmar aura.","Fue de traje para ganar aura.","i"],
+["Flopar","Fracasar.","O filme flopou.","La peli fracasó.","i"],
+["Shippar","Querer que dos sean pareja.","Shippo esses dois.","Shippeo a esos dos.","i"]
+],
+internet:[
+["kkkk / rsrs","Risa.","Kkkk morri!","¡Jajaja, me muero!","i"],["vc / tbm","você / também.","Vc vem tbm?","¿Tú también vienes?","i"],["vdd","verdade.","Vdd!","¡Verdad!","i"],["mds","meu Deus.","Mds!","¡Dios mío!","i"],["sdds","saudades.","Sdds!","¡Te echo de menos!","i"],["tlgd","tá ligado: ¿sabes?","É isso, tlgd?","Es así, ¿sabes?","i"],["sqn","só que não: ironía.","Amo segunda, sqn.","Amo los lunes… o no.","i"],["slk","cê é louco: ¡qué fuerte!","Slk!","¡Qué fuerte!","i"],["pdp","pode pá: ¡hecho!","Pdp!","¡Hecho!","i"],["nmrl","na moral: en serio.","Nmrl?","¿En serio?","i"],["fds","fim de semana.","Bom fds!","¡Buen finde!","i"],["plmds","pelo amor de Deus.","Plmds!","¡Por Dios!","i"],["blz / vlw / flw","beleza / valeu / falou.","Vlw, flw!","¡Gracias, chao!","i"],["tmj","tamo junto.","Tmj!","¡Un abrazo!","i"],["hj","hoje: hoy.","Hj tem festa.","Hoy hay fiesta.","i"],
+["Gag","Quedarse sin palabras, impactado.","Fiquei gag!","¡Me quedé loca!","i"],["Red flag","Señal de alerta.","Ciúme é red flag.","Los celos son señal de alerta.","i"],["Delulu","Delirante, ilusionado.","Ela é delulu.","Ella vive en su mundo.","i"],["Aura","Carisma. «Perdeu aura» = hizo el ridículo.","Perdeu aura!","¡Perdió aura!","i"],["Old","Pasado de moda.","Muito old.","Muy pasado.","i"],["Socorro!","Exageración ante algo gracioso.","Socorro, esse meme!","¡No puedo con este meme!","i"],["POV","Punto de vista (vídeos).","POV: cê atrasado.","POV: llegas tarde.","i"],["Biscoitar","Pescar likes.","Postou pra biscoitar.","Lo subió para pescar likes.","i"],["Gado","Pagafantas, «simp».","Ele é gado.","Es un pagafantas.","i"]
+],
+interj:[
+["Nossa!","¡Guau! ¡Madre mía!","Nossa, que lindo!","¡Guau, qué bonito!","p"],["Caraca!","¡Hala!","Caraca!","¡Hala!","p"],["Eita!","¡Uy! ¡Ostras!","Eita!","¡Uy!","p"],["Oxe!","¿Qué dices?","Oxe!","¿Cómo?","r:NE"],["Vixe!","¡Uf! ¡Ay!","Vixe!","¡Uf!","r:NE"],["Uai!","¿Cómo? ¡Pues!","Uai!","¡Pues!","r:MG"],["Bah!","¡Uf! ¡Vaya!","Bah, tchê!","¡Vaya, tío!","r:RS"],["Égua!","¡Madre mía!","Égua!","¡Madre mía!","r:PA"],["Afe!","¡Uf! (fastidio)","Afe!","¡Uf!","g"],["Putz!","¡Rayos!","Putz!","¡Rayos!","g"],["Poxa!","¡Vaya! ¡Jo!","Poxa!","¡Jo!","p"],["Ué?","¿Eh? ¿Y eso?","Ué?","¿Y eso?","p"],["Imagina!","¡De nada! ¡Para nada!","Imagina!","¡De nada!","p"]
+],
+expresiones:[
+["Pagar mico","Hacer el ridículo.","Paguei mico.","Hice el ridículo.","p"],["Enfiar o pé na jaca","Pasarse de la raya.","Enfiei o pé na jaca.","Me pasé.","p"],["Chutar o balde","Mandarlo todo a paseo.","Vou chutar o balde.","Lo mando todo a paseo.","p"],["Cara de pau","Caradura.","Que cara de pau!","¡Qué caradura!","p"],["Dor de cotovelo","Celos, despecho.","É dor de cotovelo.","Es despecho.","p"],["Quebrar o galho","Echar un cable.","Me quebra esse galho?","¿Me echas un cable?","p"],["Mão na roda","Muy útil.","É uma mão na roda.","Viene de perlas.","p"],["Pagar o pato","Pagar los platos rotos.","Paguei o pato.","Pagué los platos rotos.","p"],["Boca de siri","Punto en boca.","Boca de siri!","¡Punto en boca!","p"],["A vaca foi pro brejo","Todo se fue al traste.","A vaca foi pro brejo.","Se fue todo al traste.","p"],["Onde Judas perdeu as botas","En el quinto pino.","Mora onde Judas perdeu as botas.","Vive en el quinto pino.","p"],["Tem caroço nesse angu","Hay gato encerrado.","Tem caroço nesse angu.","Aquí hay gato encerrado.","p"],["Matar aula","Hacer novillos / rabona.","Matamos aula.","Hicimos novillos.","p"],["Cair na real","Despertar, aceptar la realidad.","Cai na real!","¡Despierta!","p"]
+],
+vulgar:[
+["Porra!","¡Joder! ¡Mierda! Muy frecuente.","","","v"],["Caralho","¡Carajo! Muy fuerte en Brasil.","","","v"],["Foda / Foda-se","Jodido o buenísimo / me importa un carajo.","","","v"],["Puto","«Tô puto» = estoy cabreadísimo.","","","v"],["PQP","«Puta que pariu»: rabia o asombro.","","","v"],["Ferrou","Estar jodido (suave).","","","v"],["Cacete","¡Caray! (vulgar medio).","","","v"],["Merda / Bosta","Mierda.","","","v"],["Viado / Bicha","Insultos homófobos. No los uses.","","","v"]
+]
+};
+
+const MORPH=[["você","cê","Cê vai hoje?"],["estou","tô","Tô cansado."],["está","tá","Tá calor, né?"],["estamos","tamo","Tamo junto!"],["para / para o","pra / pro","Vou pro centro."],["não é?","né?","Legal, né?"],["vamos embora","bora","Bora, gente!"],["em uma","numa","Moro numa casa."],["onde está?","cadê?","Cadê meu celular?"],["muito / o maior","mó","Foi mó legal."],["está ligado?","tá ligado?","Entendeu, tá ligado?"],["nós","a gente","A gente vai depois."]];
+
+const DLG=[["Lucas","E aí, Bia, beleza? Sextou!","¿Qué tal, Bia? ¡Por fin viernes!"],["Bia","Fala, Lucas! Tô de boa, mas ralei mó semana no trampo.","¡Ey! Tranqui, pero curré un montón esta semana."],["Lucas","Vai rolar um rolé na Lapa hoje. Partiu?","Hoy hay plan en Lapa. ¿Te vienes?"],["Bia","Pô, tô meio lisa… a entrada é cara?","Jo, estoy algo pelada… ¿la entrada es cara?"],["Lucas","Relaxa, é 0800! E a gente racha a gelada.","¡Tranqui, es gratis! Y pagamos la birra a medias."],["Bia","Da hora! Vou chamar a galera. O Pedro vai?","¡Genial! Aviso a la peña. ¿Va Pedro?"],["Lucas","Sei não… semana passada ele furou o rolê. Vacilão.","No sé… la semana pasada canceló el plan. Qué tío."],["Bia","Kkkk e teu crush? Vou ter que segurar vela?","Jajaja ¿y tu crush? ¿Me toca de sujetavelas?"],["Lucas","Para de me zoar! Ela tá me dando mole, sacou?","¡No me vaciles! Me tira los tejos, ¿lo pillas?"],["Bia","Ah, tá… Se der ruim, não vem chorar, hein!","Ya, claro… Si sale mal, no vengas a llorar."],["Lucas","Já é. Te pego às dez. Valeu, tmj!","Hecho. Te recojo a las diez. ¡Gracias, un abrazo!"],["Bia","Falou! Fui!","¡Chao! ¡Me voy!"]];
+
+const CLS=[["legal",1,"guay"],["treta",0,"pelea, lío"],["maneiro",1,"genial (RJ)"],["perrengue",0,"apuro"],["da hora",1,"genial (SP)"],["deu ruim",0,"salió mal"],["massa",1,"genial (NE)"],["zica",0,"mala suerte"],["brabo",1,"muy bueno, crack"],["cringe",0,"vergüenza ajena"],["show de bola",1,"excelente"],["vacilão",0,"persona que falla"],["arretado",1,"buenísimo (NE)"],["tá osso",0,"está difícil"],["top",1,"lo mejor"],["mico",0,"ridículo"]];
+
+const POOL=[["grana","dinero"],["rolê","salida, plan"],["trampo","trabajo"],["perrengue","apuro"],["crush","persona que te gusta"],["zoar","burlarse"],["liso","sin dinero"],["treta","pelea"],["balada","fiesta"],["mico","ridículo"],["sacar","entender"],["fofoca","chisme"],["gelada","cerveza"],["vazar","irse"],["mão de vaca","tacaño"],["0800","gratis"],["galera","la peña"],["chato","pesado, aburrido"]];
+
+const FLIPI=[["Nossa!","todo Brasil","Sorpresa: ¡guau!","Nossa, que lindo!"],["Eita!","todo Brasil","Susto: ¡uy!","Eita, esqueci!"],["Oxe!","Nordeste","Extrañeza: ¿qué dices?","Oxe, e eu sabia?"],["Uai!","Minas Gerais","Duda o énfasis: ¿cómo?","Uai, cê não vem?"],["Bah!","Rio Grande do Sul","Para todo: ¡vaya!","Bah, que frio!"],["Égua!","Pará","Admiración: ¡madre mía!","Égua, que calor!"],["Putz!","todo Brasil","Fastidio: ¡rayos!","Putz, perdi o ônibus."],["Ué?","todo Brasil","Extrañeza: ¿y eso?","Ué, cadê todo mundo?"]];
+
+const FLIPE=[["Pagar mico","pagar un mono","Hacer el ridículo"],["Enfiar o pé na jaca","meter el pie en la jaca (fruta)","Pasarse de la raya"],["Boca de siri","boca de cangrejo","Punto en boca"],["Dor de cotovelo","dolor de codo","Celos, despecho"],["Segurar vela","sostener la vela","Hacer de sujetavelas"],["Chutar o balde","patear el balde","Mandarlo todo a paseo"],["A vaca foi pro brejo","la vaca se fue al pantano","Todo se fue al traste"],["Tem caroço nesse angu","hay un grumo en esta polenta","Aquí hay gato encerrado"]];
+
+const TF=[["«Esquisito» significa exquisito.",0,"«Esquisito» = raro, extraño. Exquisito se dice «delicioso»."],["«Rato» significa ratón.",1,"Correcto. Un rato (de tiempo) se dice «um tempinho»."],["«Propina» significa propina.",0,"«Propina» = soborno. La propina es «gorjeta»."],["«Brincar» significa jugar.",1,"Sí: jugar o bromear. Brincar (saltar) es «pular»."],["«Polvo» significa polvo.",0,"«Polvo» = pulpo. El polvo es «pó» o «poeira»."],["«Acordar» significa despertarse.",1,"Sí. Acordar algo (combinar) es «combinar»."],["«Oficina» significa oficina.",0,"«Oficina» = taller. La oficina es «escritório»."],["«Largo» significa ancho.",1,"Correcto. Largo (comprido) es «comprido»."],["«Borracha» significa borracha.",0,"«Borracha» = goma de borrar. Borracha es «bêbada»."],["«Logo» significa luego (después).",0,"«Logo» = enseguida. Después es «depois»."],["«Sobremesa» significa postre.",1,"Correcto: la sobremesa española no tiene palabra propia."],["«Embaraçada» significa embarazada.",0,"«Embaraçada» = avergonzada. Embarazada es «grávida»."]];
+
+const FILL=[["Tô sem ___, não posso sair.",["grana","treta","crush"],0],["Bora dar um ___ na praia?",["mico","rolê","trampo"],1],["Que ___! Caí na frente de todo mundo.",["massa","valeu","mico"],2],["Ele ___ o rolê de novo, vacilão.",["furou","curtiu","sacou"],0],["Sextou! ___ praia!",["Fui","Partiu","Uai"],1],["Só agora caiu a ___.",["bola","vaca","ficha"],2],["Esse app é uma mão na ___.",["roda","massa","jaca"],0],["Não ___ mais essa novela.",["tanko","zoo","mando"],0],["A entrada é ___, não paga nada!",["salgada","0800","osso"],1],["Para de me ___, cara!",["zoar","curtir","rachar"],0]];
+
+const QUIZ=[["Tu amigo dice «Tô liso». ¿Qué le pasa?",["Está cansado","No tiene dinero","Está enfermo","Está feliz"],1,"«Liso» = sin dinero."],["¿Qué significa «esquisito»?",["Delicioso","Elegante","Raro","Caro"],2,"Falso amigo: «esquisito» = raro."],["¿Cómo se ríe un brasileño por escrito?",["jajaja","kkkk","jejeje","lol solamente"],1,"La risa brasileña es «kkkk»."],["«Deu ruim» quiere decir…",["Salió mal","Alguien se fue","Llovió","Ganó dinero"],0,"«Deu ruim» = se torció."],["¿De qué región es «uai»?",["Rio Grande do Sul","Bahía","Minas Gerais","Amazonas"],2,"«Uai» es de Minas Gerais."],["«Ele furou o rolê» significa que…",["Rompió algo","Canceló el plan","Llegó temprano","Pagó la cuenta"],1,"«Furar» = cancelar a última hora."],["«Pagar mico» es…",["Pagar a medias","Comprar un mono","Hacer el ridículo","Pagar con tarjeta"],2,"«Pagar mico» = hacer el ridículo."],["¿Cómo se dice «coger el autobús»?",["Coger o ônibus","Pegar o ônibus","Agarrar o ônibus","Tomar o busão de mão"],1,"«Pegar o ônibus». «Coger» no existe en portugués."],["«Bah, tri legal!» quiere decir…",["¡Qué ilegal!","¡Muy guay!","¡Tres veces mal!","¡Qué aburrido!"],1,"«Tri» = muy (gaúcho)."],["«A entrada é 0800» significa que es…",["A las ocho","De 800 reales","Gratis","Cerrada"],2,"«0800» = gratis."],["«Tankar» entre los jóvenes significa…",["Llenar el depósito","Aguantar","Ganar dinero","Pelear"],1,"Del inglés «tank»: aguantar."],["«Caiu a ficha» equivale a…",["Se cayó una moneda","Caer en la cuenta","Perder el turno","Tener mala suerte"],1,"Como el mexicano «caer el veinte»."]];
+
+/* mapa */
+const TILES=[["RR",1,0],["AP",3,0],["AM",1,1],["PA",2,1],["MA",3,1],["CE",4,1],["RN",5,1],["AC",0,2],["RO",1,2],["TO",2,2],["PI",3,2],["PB",5,2],["PE",4,2],["MT",1,3],["GO",2,3],["BA",3,3],["SE",4,3],["AL",5,3],["MS",1,4],["DF",2,4],["MG",3,4],["ES",4,4],["SP",2,5],["RJ",3,5],["PR",2,6],["SC",2,7],["RS",2,8]];
+const RG={N:["RR","AP","AM","PA","AC","RO","TO"],NE:["MA","CE","RN","PI","PE","PB","BA","SE","AL"],CO:["MT","GO","MS","DF"],SE:["MG","ES","SP","RJ"],S:["PR","SC","RS"]};
+const RGNAME={N:"Norte",NE:"Nordeste",CO:"Centro-Oeste",SE:"Sudeste",S:"Sur"};
+const regionOf=uf=>Object.keys(RG).find(k=>RG[k].includes(uf));
+const PANEL={
+ RJ:{n:"Rio de Janeiro",g:"carioca",w:[["Mermão","hermano"],["Maneiro","guay"],["Sinistro","impresionante"],["Bolado","enfadado"],["Caô","mentira"],["Parada","cosa"],["Já é!","¡hecho!"],["Demorou!","¡vale!"],["Coé?","¿qué tal?"],["Biscoito","galleta"]]},
+ SP:{n:"São Paulo",g:"paulista",w:[["Mano / Meu","tío, colega"],["Da hora","genial"],["Balada","fiesta"],["Trampo","curro"],["Firmeza","todo bien"],["Embaçado","complicado"],["Fita","situación"],["Bolacha","galleta"],["Tipo assim","o sea"]]},
+ MG:{n:"Minas Gerais",g:"mineiro",w:[["Uai","¿cómo? / ¡pues!"],["Trem","cosa («esse trem»)"],["Nó!","¡madre mía!"],["Sô","señor, tío"],["Bão","bueno"],["Custoso","difícil"],["Dar conta","poder con algo"],["Quitanda","dulces caseros"]]},
+ ES:{n:"Espírito Santo",g:"capixaba",w:[["Taruíra","lagartija"],["Pocar","estallar; algo genial"],["Gastura","agobio, irritación"],["Moqueca capixaba","el plato local, sin aceite de palma"]]},
+ NE:{n:"Nordeste",g:"nordestino",w:[["Oxe / Oxente","¿qué dices?"],["Vixe","¡uf!"],["Arretado","genial / furioso"],["Massa","genial"],["Aperreado","agobiado"],["Avexado","con prisa"],["Abestado","tonto"],["Mangar","burlarse"],["Visse?","¿viste? (PE)"],["Painho / Mainha","papá / mamá (BA)"],["Barril","complicado o genial (BA)"]]},
+ RS:{n:"Rio Grande do Sul",g:"gaúcho",w:[["Bah","¡vaya!"],["Tchê","tío, oye"],["Tri","muy"],["Guri / Guria","chico / chica"],["Capaz!","¡qué va!"],["Baita","enorme"],["Bergamota","mandarina"],["Cacetinho","pan francés"],["Pila","real, dinero"]]},
+ PRSC:{n:"Paraná y Santa Catarina",g:"paranaense / catarinense",w:[["Piá","chico, niño (PR)"],["Vina","salchicha (Curitiba)"],["Penal","estuche escolar (PR)"],["Tás tolo?","¿estás loco? (Florianópolis)"],["Bah","también se oye"]]},
+ N:{n:"Norte (Pará y Amazonas)",g:"nortista",w:[["Égua!","¡madre mía!"],["Pai d'égua","excelente"],["Maninho / Mana","amigo"],["Leseira","tontería, pereza"],["Pavulagem","chulería"],["Curumim","niño (tupí)"],["Umborimbora?","¿nos vamos?"],["Borogodó","encanto"]]},
+ CO:{n:"Brasília y Centro-Oeste",g:"candango / goiano",w:[["Véi","tío"],["Massa","genial"],["Baú","autobús"],["Camelo","bicicleta"],["Tesourinha","cruce en trébol"],["Bicho","tío (Goiás)"]]}
+};
+const panelKey=uf=>({RJ:"RJ",SP:"SP",MG:"MG",ES:"ES",RS:"RS",PR:"PRSC",SC:"PRSC"}[uf]||regionOf(uf));
+const RGQ=[["uai","SE","Minas Gerais"],["bah","S","Rio Grande do Sul"],["oxe","NE","todo el Nordeste"],["égua","N","Pará"],["véi","CO","Brasília"],["mermão","SE","Rio de Janeiro"],["tri","S","Rio Grande do Sul"],["arretado","NE","Nordeste"],["pai d'égua","N","Pará"],["camelo (bici)","CO","Brasília"],["da hora","SE","São Paulo"],["avexado","NE","Nordeste"]];
+
+const IMSG=[["Ana","oi galera! vc vem no rolê hj?"],["Leo","n sei, tô liso kkkk"],["Ana","relaxa, é 0800 pdp"],["Mari","slk, sdds de vcs!"],["Leo","vdd! tmj, flw"]];
+const ABBR={vc:"você",hj:"hoje (hoy)",n:"não",kkkk:"(risas)",pdp:"pode pá (¡hecho!)",slk:"cê é louco (¡qué fuerte!)",sdds:"saudades",vcs:"vocês",vdd:"verdade",tmj:"tamo junto",flw:"falou (chao)","0800":"gratis",liso:"sin dinero",rolê:"plan, salida",galera:"la peña"};
+
+/* ======== UTILIDADES ======== */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function tagHTML(t){if(t.startsWith("r:"))return `<span class="tag t-r">reg. ${t.slice(2)}</span>`;const m={p:["t-p","pop."],g:["t-g","gír."],i:["t-i","intern."],v:["t-v","vulg."]}[t];return `<span class="tag ${m[0]}">${m[1]}</span>`}
+function bump(el,cls){el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls)}
+
+/* confeti */
+const cv=$("#fx"),cx=cv.getContext("2d");let parts=[],raf=0;
+function sizeCv(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
+sizeCv();addEventListener("resize",sizeCv);
+function burst(el,n=36){if(reduce)return;const r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;const cols=["--accent","--green","--blue","--violet","--ochre"].map(css);
+ for(let i=0;i<n;i++)parts.push({x,y,vx:(Math.random()-.5)*9,vy:-Math.random()*8-2,r:3+Math.random()*4,c:cols[i%cols.length],l:70+Math.random()*30,a:Math.random()*6});
+ if(!raf)tick()}
+function tick(){cx.clearRect(0,0,innerWidth,innerHeight);parts=parts.filter(p=>p.l-->0);parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.28;p.a+=.2;cx.save();cx.translate(p.x,p.y);cx.rotate(p.a);cx.fillStyle=p.c;cx.globalAlpha=Math.min(1,p.l/30);cx.fillRect(-p.r,-p.r/2,p.r*2,p.r);cx.restore()});raf=parts.length?requestAnimationFrame(tick):0;if(!raf)cx.clearRect(0,0,innerWidth,innerHeight)}
+
+/* ======== NAVEGACIÓN ======== */
+const slides=$$(".slide");let cur=0;const onEnter={};
+slides.forEach(s=>{let i=0;s.querySelectorAll(".rv").forEach(el=>{if(!el.style.getPropertyValue("--i"))el.style.setProperty("--i",i);i++})});
+function go(n,push=true){n=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,i)=>{s.classList.toggle("active",i===n);s.classList.toggle("past",i<n);s.setAttribute("aria-hidden",i!==n)});
+ cur=n;$("#prog").style.width=((n+1)/slides.length*100)+"%";$("#sname").innerHTML=`<b>${String(n+1).padStart(2,"0")}/${slides.length}</b>${esc(slides[n].dataset.t)}`;
+ $("#prev").disabled=n===0;$("#next").disabled=n===slides.length-1;slides[n].scrollTop=0;
+ if(push){try{history.replaceState(null,"","#"+slides[n].id)}catch(e){location.hash=slides[n].id}}
+ onEnter[slides[n].id]?.();renderMenu()}
+$("#prev").onclick=()=>go(cur-1);$("#next").onclick=()=>go(cur+1);
+document.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b)go(+b.dataset.go)});
+document.addEventListener("keydown",e=>{if(e.target.matches("input,textarea"))return;if(!$("#menu").hidden&&e.key==="Escape"){$("#menu").hidden=true;return}
+ if(e.key==="ArrowRight"||e.key==="PageDown")go(cur+1);else if(e.key==="ArrowLeft"||e.key==="PageUp")go(cur-1);else if(e.key==="Home")go(0);else if(e.key==="End")go(slides.length-1)});
+let tx=0,ty=0;$("#deck").addEventListener("touchstart",e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+$("#deck").addEventListener("touchend",e=>{const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>70&&Math.abs(dy)<45)go(cur+(dx<0?1:-1))},{passive:true});
+addEventListener("hashchange",()=>{const i=slides.findIndex(s=>"#"+s.id===location.hash);if(i>=0&&i!==cur)go(i,false)});
+function renderMenu(){$("#menuList").innerHTML=slides.map((s,i)=>`<li><button type="button" class="${i===cur?"act":""}" data-mi="${i}"><span>${String(i+1).padStart(2,"0")}</span>${esc(s.dataset.t)}${s.querySelector(".act-badge")?'<em class="kind">actividad</em>':""}</button></li>`).join("")}
+$("#menuBtn").onclick=()=>{$("#menu").hidden=false};$("#menuClose").onclick=()=>{$("#menu").hidden=true};
+$("#menuList").addEventListener("click",e=>{const b=e.target.closest("[data-mi]");if(b){$("#menu").hidden=true;go(+b.dataset.mi)}});
+
+/* ======== TARJETAS DE PALABRAS ======== */
+$$("[data-words]").forEach((g,k)=>{const from=+(g.dataset.from||0),arr=D[g.dataset.words].slice(from,from+ +g.dataset.n);
+ g.innerHTML=arr.map(([t,m,ex,tr,tag],i)=>`<article class="wc rv" style="--i:${Math.min(i+2,14)}"><div class="hw"><span class="term">${esc(t)}</span>${tagHTML(tag)}</div><p class="m">${esc(m)}</p>${ex?`<p class="ex">${esc(ex)}</p>`:""}</article>`).join("")});
+
+/* ======== A1: HABLA REDUCIDA ======== */
+$("#morphs").innerHTML=MORPH.map(([f,s,e])=>`<button class="morph" type="button"><span class="hint">toca</span><span class="full">${esc(f)}</span><span class="short">${esc(s)}</span><span class="ex">${esc(e)}</span></button>`).join("");
+$("#morphs").addEventListener("click",e=>{const b=e.target.closest(".morph");if(b)b.classList.toggle("on")});
+$("#morphAll").onclick=()=>{const all=$$(".morph"),on=all.some(m=>!m.classList.contains("on"));all.forEach((m,i)=>setTimeout(()=>m.classList.toggle("on",on),reduce?0:i*70))};
+
+/* ======== A2: CHAT ======== */
+let chatTimer=null,chatTrAll=false;
+function playChat(){clearTimeout(chatTimer);const box=$("#msgs");box.innerHTML="";let i=0;
+ const step=()=>{if(i>=DLG.length){$("#chatStatus").textContent="en línea";return}
+  const [w,p,es]=DLG[i];const side=w==="Bia"?"r":"l";
+  $("#chatStatus").textContent=w+" está escribiendo…";
+  const t=document.createElement("div");t.className="typing";if(side==="r")t.style.alignSelf="flex-end";t.innerHTML="<i></i><i></i><i></i>";box.append(t);box.scrollTop=box.scrollHeight;
+  chatTimer=setTimeout(()=>{t.remove();const m=document.createElement("button");m.type="button";m.className="msg "+side;m.innerHTML=`<span class="who">${esc(w)}</span>${esc(p)}<span class="es"${chatTrAll?"":" hidden"}>${esc(es)}</span>`;box.append(m);box.scrollTop=box.scrollHeight;i++;chatTimer=setTimeout(step,reduce?150:650)},reduce?100:900)};
+ step()}
+let chatPlayed=false;onEnter["chat"]=()=>{if(!chatPlayed){chatPlayed=true;playChat()}};
+$("#chatReplay").onclick=playChat;
+$("#chatTr").onclick=()=>{chatTrAll=!chatTrAll;$("#chatTr").textContent=chatTrAll?"Ocultar traducción":"Traducir todo";$$("#msgs .es").forEach(e=>e.hidden=!chatTrAll)};
+$("#msgs").addEventListener("click",e=>{const m=e.target.closest(".msg");if(m){const s=m.querySelector(".es");s.hidden=!s.hidden}});
+
+/* ======== A3: CLASIFICA ======== */
+let clsDeck=[],clsI=0,clsOk=0,clsLock=false;
+function clsStart(){clsDeck=shuffle(CLS).slice(0,12);clsI=0;clsOk=0;$("#clsT").textContent=clsDeck.length;$("#clsReset").hidden=true;$$("[data-cls]").forEach(b=>b.disabled=false);clsShow()}
+function clsShow(){const c=$("#clsCard");c.className="cls-card";bump(c,"enter");$("#clsW").textContent=clsDeck[clsI][0];$("#clsHint").textContent="¿Positivo o negativo?";$("#clsN").textContent=clsI+1;$("#clsOk").textContent=clsOk;clsLock=false}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-cls]");if(!b||clsLock)return;clsLock=true;
+ const [w,v,m]=clsDeck[clsI],ans=+b.dataset.cls,fb=$("#clsFb"),c=$("#clsCard");
+ if(ans===v){clsOk++;fb.className="feedback ok";fb.textContent=`¡Bien! «${w}» = ${m}.`;burst(c,24)}else{fb.className="feedback no";fb.textContent=`No: «${w}» = ${m}.`;bump(c,"shake")}
+ $("#clsOk").textContent=clsOk;
+ setTimeout(()=>{c.classList.add(v?"goR":"goL");setTimeout(()=>{clsI++;if(clsI<clsDeck.length)clsShow();else{$("#clsW").textContent=`${clsOk}/${clsDeck.length}`;$("#clsHint").textContent=clsOk>=10?"¡Excelente!":clsOk>=7?"¡Muy bien!":"Repasa el tema 2";c.className="cls-card enter";$("#clsReset").hidden=false;$$("[data-cls]").forEach(b=>b.disabled=true);if(clsOk>=10)burst(c,70)}},reduce?0:350)},reduce?300:900)});
+$("#clsReset").onclick=()=>{$("#clsFb").textContent="";clsStart()};clsStart();
+
+/* ======== A4: UNE ======== */
+let mSel=null,mOk=0;
+function mRound(){const set=shuffle(POOL).slice(0,6);mOk=0;$("#mOk").textContent=0;mSel=null;
+ $("#mL").innerHTML=set.map(([t],i)=>`<button type="button" class="mbtn term" data-k="${i}">${esc(t)}</button>`).join("");
+ $("#mR").innerHTML=shuffle(set.map((p,i)=>[p[1],i])).map(([m,i])=>`<button type="button" class="mbtn" data-k="${i}">${esc(m)}</button>`).join("")}
+$("#mL").addEventListener("click",e=>{const b=e.target.closest(".mbtn");if(!b||b.disabled)return;$$("#mL .mbtn").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");mSel=b});
+$("#mR").addEventListener("click",e=>{const b=e.target.closest(".mbtn");if(!b||b.disabled)return;if(!mSel){bump(b,"shake");return}
+ if(b.dataset.k===mSel.dataset.k){[b,mSel].forEach(x=>{x.classList.remove("sel");x.classList.add("done");x.disabled=true;bump(x,"pop")});mOk++;$("#mOk").textContent=mOk;burst(b,18);mSel=null;if(mOk===6)setTimeout(()=>burst($("#mR"),70),300)}
+ else{b.classList.add("bad");bump(b,"shake");setTimeout(()=>b.classList.remove("bad"),500)}});
+$("#mNew").onclick=mRound;mRound();
+
+/* ======== A5 y A9: FLIP ======== */
+$("#flipsI").innerHTML=FLIPI.map(([w,r,m,ex],i)=>`<button class="flip rv" style="--i:${i+3}" type="button" aria-label="Girar tarjeta ${esc(w)}"><div class="fi"><div class="fa"><span class="big">${esc(w)}</span><small>${esc(r)}</small></div><div class="fb"><b>${esc(m)}</b><i>${esc(ex)}</i></div></div></button>`).join("");
+$("#flipsE").innerHTML=FLIPE.map(([e,l,r],i)=>`<button class="flip rv" style="--i:${i+3}" type="button" aria-label="Girar tarjeta ${esc(e)}"><div class="fi"><div class="fa"><span class="big" style="font-size:1.3rem">${esc(e)}</span><small>literal: «${esc(l)}»</small></div><div class="fb"><b>${esc(r)}</b><i>${esc(e)}</i></div></div></button>`).join("");
+document.addEventListener("click",e=>{const f=e.target.closest(".flip");if(f)f.classList.toggle("on")});
+
+/* ======== MAPA ======== */
+function buildMap(el,id){const S=48,G=5,W=6*(S+G),H=9*(S+G);
+ el.innerHTML=`<svg viewBox="-2 -2 ${W+4} ${H+4}" role="group" aria-label="Mapa de Brasil por estados">${TILES.map(([uf,c,r])=>{const k=regionOf(uf);return `<g class="tile" data-uf="${uf}" data-r="${k}" tabindex="0" role="button" aria-label="${uf}, región ${RGNAME[k]}"><rect x="${c*(S+G)}" y="${r*(S+G)}" width="${S}" height="${S}" rx="7" fill="var(--r${k})"/><text x="${c*(S+G)+S/2}" y="${r*(S+G)+S/2+5}" text-anchor="middle">${uf}</text></g>`}).join("")}</svg>`}
+buildMap($("#map1"));buildMap($("#map2"));
+$("#legend1").innerHTML=Object.keys(RGNAME).map(k=>`<span><i style="background:var(--r${k})"></i>${RGNAME[k]}</span>`).join("");
+function showPanel(uf){const p=PANEL[panelKey(uf)];const k=regionOf(uf);
+ $("#panel").innerHTML=`<div class="ph"><h3>${esc(p.n)}</h3><span class="tag" style="background:var(--r${k});color:var(--on-r)">${RGNAME[k]} · ${esc(p.g)}</span></div><ul>${p.w.map(([a,b],i)=>`<li style="--i:${i}"><b>${esc(a)}</b><span>${esc(b)}</span></li>`).join("")}</ul>`;
+ const m=$("#map1 .tmap")||$("#map1");m.classList.add("dim");m.querySelectorAll(".tile").forEach(t=>t.classList.toggle("hi",t.dataset.uf===uf))}
+function mapAct(e){const t=e.target.closest(".tile");if(!t)return;if(e.type==="keydown"&&e.key!=="Enter"&&e.key!==" ")return;e.preventDefault?.();showPanel(t.dataset.uf)}
+$("#map1").addEventListener("click",mapAct);$("#map1").addEventListener("keydown",mapAct);
+$("#map1").classList.add("tmap");
+$("#panel").innerHTML=`<div class="ph"><h3>Elige un estado</h3></div><p class="muted">Empieza por Minas Gerais (MG), Rio Grande do Sul (RS) o Bahía (BA).</p>`;
+
+/* ======== A6: DE DÓNDE ======== */
+let rgDeck=[],rgI=0,rgOk=0;
+$("#rgBtns").innerHTML=Object.keys(RGNAME).map(k=>`<button class="regbtn" type="button" data-rg="${k}" style="background:var(--r${k})">${RGNAME[k]}</button>`).join("");
+function rgStart(){rgDeck=shuffle(RGQ);rgI=0;rgOk=0;rgShow()}
+function rgShow(){const [w]=rgDeck[rgI];$("#rgW").textContent=w;$("#rgM").textContent="";$("#rgN").textContent=`Palabra ${rgI+1} de ${rgDeck.length}`;$("#rgOk").textContent=rgOk;$("#rgFb").textContent="";$("#rgNext").hidden=true;$$(".regbtn").forEach(b=>b.disabled=false);
+ const m=$("#map2");m.classList.remove("dim");m.querySelectorAll(".tile").forEach(t=>t.classList.remove("hi","flash"));bump($("#rgW"),"pop")}
+$("#rgBtns").addEventListener("click",e=>{const b=e.target.closest(".regbtn");if(!b||b.disabled)return;const [w,k,where]=rgDeck[rgI];$$(".regbtn").forEach(x=>x.disabled=true);
+ const fb=$("#rgFb");if(b.dataset.rg===k){rgOk++;fb.className="feedback ok";fb.textContent=`¡Correcto! «${w}» es de ${where} (${RGNAME[k]}).`;burst(b,24)}else{fb.className="feedback no";fb.textContent=`Casi: «${w}» es de ${where} (${RGNAME[k]}).`;bump(b,"shake")}
+ $("#rgOk").textContent=rgOk;const m=$("#map2");m.classList.add("dim");m.querySelectorAll(".tile").forEach(t=>{const on=t.dataset.r===k;t.classList.toggle("hi",on);if(on)bump(t,"flash")});
+ const nb=$("#rgNext");nb.hidden=false;nb.textContent=rgI===rgDeck.length-1?`Resultado: ${rgOk}/${rgDeck.length} · Jugar otra vez`:"Siguiente"});
+$("#rgNext").onclick=()=>{if(rgI===rgDeck.length-1)rgStart();else{rgI++;rgShow()}};
+$("#map2").classList.add("tmap");rgStart();
+
+/* ======== A7: DESCIFRA ======== */
+let abT=0;
+$("#imsgs").innerHTML=IMSG.map(([w,t],i)=>`<div class="msg ${i%2?"r":"l"}" style="cursor:default;animation-delay:${i*.25}s"><span class="who">${esc(w)}</span>${t.split(" ").map(tok=>{const k=tok.replace(/[!?,.]/g,"");if(ABBR[k]!==undefined){abT++;return `<button class="abbr" type="button" data-full="${esc(ABBR[k])}" data-short="${esc(tok)}">${esc(tok)}</button>`}return esc(tok)}).join(" ")}</div>`).join("");
+$("#abT").textContent=abT;
+const abCount=()=>$("#abN").textContent=$$(".abbr.open").length;
+$("#imsgs").addEventListener("click",e=>{const b=e.target.closest(".abbr");if(!b)return;const o=b.classList.toggle("open");b.textContent=o?b.dataset.full:b.dataset.short;bump(b,"pop");abCount();if($$(".abbr.open").length===abT)burst($("#imsgs"),50)});
+$("#abAll").onclick=()=>{$$(".abbr").forEach((b,i)=>setTimeout(()=>{b.classList.add("open");b.textContent=b.dataset.full;bump(b,"pop");abCount()},reduce?0:i*90))};
+
+/* ======== A8: V/F ======== */
+let tfDeck=[],tfI=0,tfOk=0;
+function tfStart(){tfDeck=shuffle(TF);tfI=0;tfOk=0;$("#tfT").textContent=tfDeck.length;tfShow()}
+function tfShow(){$("#tfCard").classList.remove("on");setTimeout(()=>{$("#tfQ").textContent=tfDeck[tfI][0]},reduce?0:250);$("#tfN").textContent=tfI+1;$("#tfOk").textContent=tfOk;$("#tfBtns").hidden=false;$("#tfNext").hidden=true}
+$("#tfBtns").addEventListener("click",e=>{const b=e.target.closest("[data-tf]");if(!b)return;const [,v,ex]=tfDeck[tfI],ok=+b.dataset.tf===v;if(ok)tfOk++;
+ const fb=$("#tfB");fb.className="fb "+(ok?"ok":"no");$("#tfR").textContent=(ok?"¡Correcto! ":"¡Ups! ")+(v?"Es verdadero":"Es falso");$("#tfE").textContent=ex;$("#tfCard").classList.add("on");if(ok)burst($("#tfCard"),24);
+ $("#tfOk").textContent=tfOk;$("#tfBtns").hidden=true;const n=$("#tfNext");n.hidden=false;n.textContent=tfI===tfDeck.length-1?`Resultado: ${tfOk}/${tfDeck.length} · Otra vez`:"Siguiente"});
+$("#tfNext").onclick=()=>{if(tfI===tfDeck.length-1)tfStart();else{tfI++;tfShow()}};tfStart();
+
+/* ======== A10: COMPLETA ======== */
+let fOk=0;$("#fT").textContent=FILL.length;
+$("#fills").innerHTML=FILL.map(([s,o,a],i)=>`<div class="fill" data-a="${a}"><p class="s">${esc(s).replace("___",'<span class="blank">&nbsp;</span>')}</p><div class="row">${o.map((x,j)=>`<button type="button" class="chip" data-j="${j}">${esc(x)}</button>`).join("")}</div></div>`).join("");
+$("#fills").addEventListener("click",e=>{const c=e.target.closest(".chip");if(!c||c.disabled)return;const f=c.closest(".fill");
+ if(+c.dataset.j===+f.dataset.a){const bl=f.querySelector(".blank");bl.textContent=c.textContent;bl.classList.add("ok");f.querySelectorAll(".chip").forEach(x=>x.disabled=true);fOk++;$("#fOk").textContent=fOk;burst(bl,16);if(fOk===FILL.length)burst($("#fills"),80)}
+ else{c.classList.add("bad");bump(c,"shake");c.disabled=true}});
+
+/* ======== A11: MEMORIA ======== */
+let memOpen=[],memLock=false,memMoves=0,memOk=0;
+function memNew(){const set=shuffle(POOL).slice(0,6);const cards=shuffle(set.flatMap((p,i)=>[[p[0],i,"t"],[p[1],i,"m"]]));memOpen=[];memLock=false;memMoves=0;memOk=0;$("#memMoves").textContent=0;$("#memOk").textContent=0;
+ $("#mem").innerHTML=cards.map(([x,i,k])=>`<button type="button" class="mcard" data-p="${i}" aria-label="Carta oculta"><div class="fi"><div class="fa">?</div><div class="fb ${k}">${esc(x)}</div></div></button>`).join("")}
+$("#mem").addEventListener("click",e=>{const c=e.target.closest(".mcard");if(!c||memLock||c.classList.contains("on")||c.classList.contains("done"))return;c.classList.add("on");c.setAttribute("aria-label",c.textContent.replace("?",""));memOpen.push(c);
+ if(memOpen.length===2){memMoves++;$("#memMoves").textContent=memMoves;const [a,b]=memOpen;
+  if(a.dataset.p===b.dataset.p){setTimeout(()=>{a.classList.add("done");b.classList.add("done");memOk++;$("#memOk").textContent=memOk;burst(b,20);if(memOk===6)setTimeout(()=>burst($("#mem"),90),300)},350);memOpen=[]}
+  else{memLock=true;setTimeout(()=>{a.classList.remove("on");b.classList.remove("on");memOpen=[];memLock=false},reduce?600:1000)}}});
+$("#memNew").onclick=memNew;memNew();
+
+/* ======== ZONA ROJA ======== */
+$("#reds").innerHTML=D.vulgar.map(([t,m])=>`<button type="button" class="redc"><small>vulg. · toca para ver</small><span class="term">${esc(t)}</span><span class="m">${esc(m)}</span></button>`).join("");
+$("#reds").addEventListener("click",e=>{const r=e.target.closest(".redc");if(r)r.classList.toggle("on")});
+
+/* ======== QUIZ ======== */
+let qI=0,qOk=0;
+function qShow(){const [q,o]=QUIZ[qI];$("#qz").innerHTML=`<div class="qbar"><i style="width:${qI/QUIZ.length*100}%"></i></div><div class="row" style="justify-content:space-between"><span class="eyebrow" style="color:var(--muted)">Pregunta ${qI+1} de ${QUIZ.length}</span><span class="score">${qOk} aciertos</span></div><p class="qt">${esc(q)}</p><div class="opts">${o.map((x,j)=>`<button class="opt" type="button" data-j="${j}">${esc(x)}</button>`).join("")}</div><p class="feedback" aria-live="polite"></p><div><button class="btn primary" type="button" id="qNext" hidden>Siguiente</button></div>`}
+function qEnd(){const pct=qOk/QUIZ.length,msg=pct>=.9?"¡Brabo! Ya hablas como un brasileño.":pct>=.6?"¡Mandou bem! Vas muy bien.":"Deu ruim… ¡repasa y vuelve a intentarlo!";
+ $("#qz").innerHTML=`<div class="qbar"><i style="width:100%"></i></div><svg class="medal" viewBox="0 0 120 150" aria-hidden="true"><path d="M38 0 L60 50 L82 0 L100 0 L70 66 L50 66 L20 0Z" fill="var(--accent)"/><circle cx="60" cy="98" r="44" fill="var(--ochre-soft)" stroke="var(--ochre)" stroke-width="6"/><text x="60" y="110" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="34" fill="var(--ochre)">${qOk}/${QUIZ.length}</text></svg><p class="qt" style="text-align:center">${msg}</p><div class="row" style="justify-content:center"><button class="btn primary" type="button" id="qAgain">Intentar de nuevo</button><button class="btn" type="button" data-go="${slides.length-2}">Ver glosario</button></div>`;
+ if(pct>=.6)setTimeout(()=>burst($(".medal"),120),300)}
+$("#qz").addEventListener("click",e=>{if(e.target.id==="qAgain"){qI=0;qOk=0;qShow();return}if(e.target.id==="qNext"){qI++;qI<QUIZ.length?qShow():qEnd();return}
+ const b=e.target.closest(".opt");if(!b||b.disabled)return;const [,,a,why]=QUIZ[qI];$$("#qz .opt").forEach(x=>{x.disabled=true;if(+x.dataset.j===a)x.classList.add("right")});
+ const fb=$("#qz .feedback");if(+b.dataset.j===a){qOk++;fb.className="feedback ok";fb.textContent="¡Correcto! "+why;burst(b,26)}else{b.classList.add("wrong");bump(b,"shake");fb.className="feedback no";fb.textContent=why}
+ $("#qz .score").textContent=qOk+" aciertos";$("#qNext").hidden=false;$("#qNext").textContent=qI===QUIZ.length-1?"Ver resultado":"Siguiente"});
+qShow();
+
+/* ======== GLOSARIO ======== */
+const GT={saludos:"Saludos",bueno:"Positivo",malo:"Negativo",social:"Fiesta y amor",grana:"Dinero y trabajo",verbos:"Verbos",interj:"Interjecciones",internet:"Internet",expresiones:"Expresiones",vulgar:"Zona roja"};
+$("#gloss").innerHTML=Object.keys(GT).map(k=>`<div class="gsec"><h3>${GT[k]}</h3><div class="words">${D[k].map(([t,m,ex,tr,tag])=>`<article class="wc" data-s="${esc((t+" "+m+" "+ex+" "+tr).toLowerCase())}"><div class="hw"><span class="term">${esc(t)}</span>${tagHTML(tag)}</div><p class="m">${esc(m)}</p>${ex?`<p class="ex">${esc(ex)}</p><p class="m muted" style="font-size:.82rem">${esc(tr)}</p>`:""}</article>`).join("")}</div></div>`).join("");
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+$("#gq").addEventListener("input",e=>{const v=norm(e.target.value.trim());$$("#gloss .wc").forEach(c=>c.hidden=v&&!norm(c.dataset.s).includes(v));$$("#gloss .gsec").forEach(s=>s.hidden=![...s.querySelectorAll(".wc")].some(c=>!c.hidden))});
+
+/* inicio */
+const start=slides.findIndex(s=>"#"+s.id===location.hash);go(start>=0?start:0,false);
+</script>
+</body>
+</html>
